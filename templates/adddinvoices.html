@@ -1,0 +1,436 @@
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Invoice</title>
+    <style>
+        .sub-invoice {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .sub-invoice th, .sub-invoice td {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .sub-invoice th {
+            background-color: #f2f2f2;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .success {
+            color: green;
+            font-size: 0.9em;
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            margin-right: 10px;
+        }
+
+        .feedback {
+            margin: 10px;
+            padding: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.success {
+            color: green;
+        }
+
+        .feedback.error {
+            color: red;
+        }
+
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.item-form {
+    width: 30%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 4%;
+}
+
+.item-form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.item-form input {
+    width: 93%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.item-form input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.item-form button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.item-form button:hover {
+    background-color: #0056b3;
+}
+
+.invoice {
+    width: 59%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: -41%;
+    margin-right: 0%;
+}
+
+.sub-invoice {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.sub-invoice th, .sub-invoice td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.sub-invoice th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.main-invoice {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.main-invoice th {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px;
+    color: #333;
+}
+
+.button-group {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.button-group button#save-invoice {
+    background-color: #007bff;
+}
+
+.button-group button#save-invoice:hover {
+    background-color: #0056b3;
+}
+
+.button-group button:hover {
+    background-color: #218838;
+}
+
+.feedback {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 4px;
+    display: none;
+}
+
+.feedback.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    width: 30%;
+    margin-left: 33%;
+    margin-top: -22%;
+   
+}
+
+.feedback.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    width: 30%;
+    margin-left: 33%;
+    margin-top: -20%;
+   
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="item-form">
+        <form id="invoice-form" method="POST">
+            <!-- Customer Name Field -->
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" id="customer_name" name="customer_name" placeholder="Customer Name" required><br>
+
+            <!-- Product Fields -->
+            <label for="product_id">Product ID:</label>
+            <input type="text" id="product_id" name="product_id" placeholder="Product ID" required><br>
+
+            <label for="product_name">Product Name:</label>
+            <input type="text" id="product_name" name="product_name" placeholder="Product Name" readonly><br>
+
+            <label for="product_price">Product Price:</label>
+            <input type="number" id="product_price" name="product_price" placeholder="Product Price" readonly><br>
+
+            <label for="product_quntity">Product Quantity:</label>
+            <input type="number" id="product_quntity" name="product_quntity" placeholder="Product Quantity" required><br>
+
+            <button type="submit">Add item</button>
+        </form>
+    </div>
+
+    <div class="invoice">
+        <!-- Invoice Table -->
+        <table class="sub-invoice">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Price</th>
+                    <th>Product Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be added here -->
+            </tbody>
+        </table>
+
+        <!-- Total Table -->
+        <table class="main-invoice">
+            <tr>
+                <th>Total: 0.00</th>
+            </tr>
+        </table>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button id="save-invoice">Save Invoice</button>
+            <button id="print-invoice">Print Invoice</button>
+        </div>
+    </div>
+
+    <div class="feedback"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const customerNameInput = document.querySelector("input[name='customer_name']");
+            const productIdInput = document.querySelector("input[name='product_id']");
+            const productNameInput = document.querySelector("input[name='product_name']");
+            const productPriceInput = document.querySelector("input[name='product_price']");
+            const productQuantityInput = document.querySelector("input[name='product_quntity']");
+            const subInvoiceTable = document.querySelector(".sub-invoice tbody");
+            const mainInvoiceTotal = document.querySelector(".main-invoice th");
+            const addItemButton = document.querySelector("form button[type='submit']");
+            const saveInvoiceButton = document.querySelector("#save-invoice");
+            const printInvoiceButton = document.querySelector("#print-invoice");
+            const feedbackDiv = document.querySelector(".feedback");
+
+            // Fetch product details by product ID
+            productIdInput.addEventListener("blur", () => {
+                const productId = productIdInput.value.trim();
+                if (!productId) return;
+
+                fetch(`/fetch_product?product_id=${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            displayFeedback(data.error, "error");
+                            productNameInput.value = "";
+                            productPriceInput.value = "";
+                        } else {
+                            productNameInput.value = data.product_name;
+                            productPriceInput.value = data.product_price;
+                        }
+                    })
+                    .catch(err => displayFeedback("Error fetching product details.", "error"));
+            });
+
+            // Add item to the sub-invoice table
+            addItemButton.addEventListener("click", (event) => {
+                event.preventDefault(); // Prevent form submission
+
+                const productId = productIdInput.value.trim();
+                const productName = productNameInput.value.trim();
+                const productPrice = parseFloat(productPriceInput.value);
+                const productQuantity = parseInt(productQuantityInput.value);
+
+                if (!productId || !productName || !productPrice || isNaN(productQuantity) || productQuantity <= 0) {
+                    displayFeedback("Please fill all fields correctly.", "error");
+                    return;
+                }
+
+                const total = (productPrice * productQuantity).toFixed(2);
+
+                // Add a new row to the table
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${productId}</td>
+                    <td>${productName}</td>
+                    <td>${productPrice.toFixed(2)}</td>
+                    <td>${productQuantity}</td>
+                    <td>${total}</td>
+                `;
+                subInvoiceTable.appendChild(row);
+
+                // Update the main-invoice total
+                updateMainInvoiceTotal();
+
+                // Clear form inputs and provide success feedback
+                productIdInput.value = "";
+                productNameInput.value = "";
+                productPriceInput.value = "";
+                productQuantityInput.value = "";
+                displayFeedback("Item added successfully!", "success");
+            });
+
+            // Save the invoice to the server
+            saveInvoiceButton.addEventListener("click", () => {
+                const rows = subInvoiceTable.querySelectorAll("tr");
+                const invoiceData = [];
+
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll("td");
+                    if (cells.length > 0) {
+                        invoiceData.push({
+                            product_id: cells[0].textContent,
+                            product_name: cells[1].textContent,
+                            product_price: parseFloat(cells[2].textContent),
+                            product_quantity: parseInt(cells[3].textContent),
+                            total: parseFloat(cells[4].textContent),
+                        });
+                    }
+                });
+
+                const customerName = customerNameInput.value.trim();
+                if (invoiceData.length === 0 || !customerName) {
+                    displayFeedback("Please add products and customer name.", "error");
+                    return;
+                }
+
+                fetch('/save_invoice', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        invoice: invoiceData,
+                        customer_name: customerName
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            displayFeedback("Invoice saved successfully!", "success");
+
+                            // Clear the form and reset the table after a successful save
+                            resetInvoiceForm();
+                        } else {
+                            displayFeedback("Error saving invoice.", "error");
+                        }
+                    })
+                    .catch(err => displayFeedback("Error saving invoice.", "error"));
+            });
+
+            // Print the invoice
+            printInvoiceButton.addEventListener("click", () => {
+                window.print();
+            });
+
+            // Calculate and update the total in the main-invoice table
+            function updateMainInvoiceTotal() {
+                const rows = subInvoiceTable.querySelectorAll("tr");
+                let grandTotal = 0;
+
+                rows.forEach(row => {
+                    const totalCell = row.cells[4];
+                    if (totalCell) {
+                        grandTotal += parseFloat(totalCell.textContent);
+                    }
+                });
+
+                mainInvoiceTotal.textContent = `Total: ${grandTotal.toFixed(2)}`;
+            }
+
+            // Reset invoice form and table after saving
+            function resetInvoiceForm() {
+                subInvoiceTable.innerHTML = '';  // Clear the table rows
+                updateMainInvoiceTotal();        // Reset the total to 0
+                customerNameInput.value = '';    // Clear customer name
+                displayFeedback("Invoice saved and reset successfully.", "success");
+            }
+
+            // Display feedback message
+            function displayFeedback(message, type) {
+                feedbackDiv.textContent = message;
+                feedbackDiv.className = `feedback ${type}`;
+                feedbackDiv.style.display = 'block';
+                setTimeout(() => {
+                    feedbackDiv.style.display = 'none';
+                    feedbackDiv.className = "feedback";
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>

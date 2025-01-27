@@ -1,0 +1,163 @@
+{% include 'nav.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin: 20px 0;
+        }
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .popup.active {
+            display: block;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .popup-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Management</h1>
+
+    <!-- Add Product Form -->
+    <form method="POST" action="/products">
+        <input type="number" name="product_id" placeholder="Product Id" required>
+        <input type="text" name="product_name" placeholder="Product Name" required>
+        <input type="number" step="0.01" name="product_price" placeholder="Product Price" required>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <!-- Product List -->
+    <table>
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                <th>Add Date</th>
+                <th>Update Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_id1 }}</td>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.product_price }}</td>
+                <td>{{ product.add_date }}</td>
+                <td>{{ product.update_date or "Not updated yet" }}</td>
+                <td>
+                    <button onclick="viewDetails('{{ product.product_id }}', '{{ product.product_name }}', '{{ product.product_price }}', '{{ product.add_date }}', '{{ product.update_date }}')">View</button>
+                    <button onclick="openUpdatePopup('{{ product.product_id }}', '{{ product.product_name }}', '{{ product.product_price }}')">Update</button>
+                    <form method="POST" action="/delete_product/{{ product.product_id }}" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Popup for Viewing Details -->
+    <div class="popup-overlay" id="view-popup-overlay"></div>
+    <div class="popup" id="view-popup">
+        <h2>Product Details</h2>
+        <p><strong>Product ID:</strong> <span id="view-product-id"></span></p>
+        <p><strong>Product ID:</strong> <span id="view-product-id1"></span></p>
+        <p><strong>Product Name:</strong> <span id="view-product-name"></span></p>
+        <p><strong>Product Price:</strong> <span id="view-product-price"></span></p>
+        <p><strong>Add Date:</strong> <span id="view-add-date"></span></p>
+        <p><strong>Update Date:</strong> <span id="view-update-date"></span></p>
+        <button onclick="closeViewPopup()">Close</button>
+    </div>
+
+    <!-- Popup for Updating Product -->
+    <div class="popup-overlay" id="update-popup-overlay"></div>
+    <div class="popup" id="update-popup">
+        <h2>Update Product</h2>
+        <form id="update-popup-form" method="POST">
+            <input type="text" name="product_name" id="update-product-name" placeholder="Product Name" required>
+            <input type="number" step="0.01" name="product_price" id="update-product-price" placeholder="Product Price" required>
+            <button type="submit">Update</button>
+        </form>
+        <button onclick="closeUpdatePopup()">Cancel</button>
+    </div>
+
+    <script>
+        // Open View Details Popup
+        function viewDetails(productId, productName, productPrice, addDate, updateDate) {
+            document.getElementById('view-product-id').textContent = productId;
+            document.getElementById('view-product-name').textContent = productName;
+            document.getElementById('view-product-price').textContent = productPrice;
+            document.getElementById('view-add-date').textContent = addDate;
+            document.getElementById('view-update-date').textContent = updateDate || "Not updated yet";
+
+            document.getElementById('view-popup').classList.add('active');
+            document.getElementById('view-popup-overlay').classList.add('active');
+        }
+
+        function closeViewPopup() {
+            document.getElementById('view-popup').classList.remove('active');
+            document.getElementById('view-popup-overlay').classList.remove('active');
+        }
+
+        // Open Update Popup
+        function openUpdatePopup(productId, productName, productPrice) {
+            const updatePopup = document.getElementById('update-popup');
+            const updateOverlay = document.getElementById('update-popup-overlay');
+
+            // Fill the popup form with product details
+            document.getElementById('update-product-name').value = productName;
+            document.getElementById('update-product-price').value = productPrice;
+
+            // Set the action URL of the form
+            document.getElementById('update-popup-form').action = `/update_product/${productId}`;
+
+            updatePopup.classList.add('active');
+            updateOverlay.classList.add('active');
+        }
+
+        function closeUpdatePopup() {
+            document.getElementById('update-popup').classList.remove('active');
+            document.getElementById('update-popup-overlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

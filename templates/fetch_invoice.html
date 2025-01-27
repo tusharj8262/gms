@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Invoices</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>All Invoices</h1>
+
+        <!-- Button to load all invoices -->
+        <button id="loadInvoicesBtn" class="btn btn-primary mb-3">Load All Invoices</button>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="mt-4 text-danger" style="display:none;"></div>
+
+        <!-- Table to display invoices -->
+        <table id="invoicesTable" class="table table-bordered table-striped mt-4" style="display:none;">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Customer Name</th>
+                    <th>Created Date</th>
+                    <th>Items</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody id="invoicesList">
+                <!-- Dynamic rows will be added here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // When the "Load All Invoices" button is clicked
+        $('#loadInvoicesBtn').on('click', function() {
+            // Hide any previous error messages or tables
+            $('#errorMessage').hide();
+            $('#invoicesTable').hide();
+            $('#invoicesList').empty();
+
+            // Fetch all invoices via AJAX
+            $.ajax({
+                url: '/fetch_all_invoices',  // Make sure your route for fetching invoices is correct
+                method: 'GET',
+                success: function(data) {
+                    if (data.length === 0) {
+                        $('#errorMessage').text('No invoices found.').show();
+                        return;
+                    }
+
+                    // Populate the table with invoice data
+                    var invoicesList = $('#invoicesList');
+                    data.forEach(function(invoice) {
+                        var totalAmount = 0;
+                        var itemsList = '';
+
+                        // Loop through items and add to itemsList string
+                        invoice.items.forEach(function(item) {
+                            itemsList += item.product_name + ' (x' + item.product_quantity + ') - $' + item.total.toFixed(2) + '<br>';
+                            totalAmount += item.total;
+                        });
+
+                        // Create table row for the current invoice
+                        var row = $('<tr>');
+                        row.append('<td>' + invoice.invoice_id + '</td>');
+                        row.append('<td>' + invoice.customer_name + '</td>');
+                        row.append('<td>' + invoice.created_date + '</td>');
+                        row.append('<td>' + itemsList + '</td>');
+                        row.append('<td>$' + totalAmount.toFixed(2) + '</td>'); // Display total amount for invoice
+                        invoicesList.append(row);
+                    });
+
+                    // Show the table with invoice data
+                    $('#invoicesTable').show();
+                },
+                error: function(xhr, status, error) {
+                    // Handle error (e.g., no invoices found)
+                    var errorMessage = 'An error occurred: ' + xhr.responseJSON.error;
+                    $('#errorMessage').text(errorMessage).show();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

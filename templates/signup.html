@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        /* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Main container styling */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-top: -32%;
+
+
+}
+
+/* Form styling */
+form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+form input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+form input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+/* Error message styling */
+p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Submit button styling */
+form button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+.login
+{
+    background-color: #5652d2;
+    color: white;
+    width: 50%;
+}
+.home
+{
+    background-color: #5652d2;
+    color: white;
+    width: 50%;
+    margin-top: -20%;
+    margin-left: 51%;
+}
+a{
+    color: white;
+    
+}
+    </style>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="/signup">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <button type="submit">Sign Up</button>
+        <br>
+        <p>You have already account</p>
+        
+        <button class="login"><a href="/login">Login</a> </button>
+        <button class="home" ><a href="/">Home</a> </button>
+    </form>
+    
+</body>
+</html>
